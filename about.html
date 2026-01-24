@@ -42,26 +42,12 @@
     }
     
    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #0066cc;
-      color: white;
-      width: 100%;
-    }
-    .dark-mode {
-      background-color: #121212;
-      color: #e0e0e0;
-    }
-    .dark-mode header, .dark-mode nav, .dark-mode footer {
-      background-color: #1e1e1e;
-    }
-    .dark-mode .container {
-      background: #1e1e1e;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
-    .dark-mode img {
-      filter: brightness(0.8);
-    }
+  text-align: center;
+  padding: 20px;
+  background-color: #0066cc;
+  color: white;
+  width: 100%;
+}
   </style>
 </head>
 <body>
@@ -88,18 +74,6 @@
   <footer>
     <p>© 2026 Zeki – My First Project</p>
   </footer>
-
-  <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
-    Dark Mode
-  </button>
-
-  <script>
-    const btn = document.getElementById('dark-mode-btn');
-    btn.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
-    });
-  </script>
 
 </body>
 </html>
