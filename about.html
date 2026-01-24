@@ -48,6 +48,17 @@
   color: white;
   width: 100%;
 }
+    .dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .dark-mode header, .dark-mode nav, .dark-mode footer {
+      background-color: #1e1e1e;
+    }
+    .dark-mode main {
+      background: #1e1e1e;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
   </style>
 </head>
 <body>
@@ -61,7 +72,12 @@
     <a href="about.html">About</a>
   </nav>
 
+  <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Dark Mode
+  </button>
+
   <div class="container">
+    <img src="stripe-logo.png" alt="Zeki's Profile Photo" style="max-width: 200px; border-radius: 50%; margin: 20px auto; display: block;">
     <h2>Who I Am</h2>
     <p>Hi! I'm Zeki from Philadelphia. I'm learning to code from scratch and just built my first website on Day 3. This is Day 4 — adding pages and navigation!</p>
     
@@ -74,6 +90,18 @@
   <footer>
     <p>© 2026 Zeki – My First Project</p>
   </footer>
+
+  <script>
+    const btn = document.getElementById('dark-mode-btn');
+    btn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        btn.textContent = 'Light Mode';
+      } else {
+        btn.textContent = 'Dark Mode';
+      }
+    });
+  </script>
 
 </body>
 </html>
