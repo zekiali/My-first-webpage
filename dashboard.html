@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages Dashboard - Zeki</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: #0066cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      background-color: #0052a3;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #0066cc;
+      color: white;
+    }
+    footer {
+      background-color: #0066cc;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Messages Dashboard</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="dashboard.html">Dashboard</ sprawn</a>
+  </nav>
+
+  <main>
+    <h2>Received Messages</h2>
+    <table id="messages-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Messages loaded here by JS -->
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>© 2026 Zeki – My First Project</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabase = Supabase.createClient(
+      'https://ivzgavjkczflzwjkyohi.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2emdhdmprY3pmbHp3amt5b2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDMwNDEsImV4cCI6MjA4NTE3OTA0MX0.DYAMKSP3QVDAIvrmaJwg3b9uqLQ4mm88Wvsf1wJ2isE'
+    );
+
+    async function loadMessages() {
+      const { data: messages, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading messages:', error);
+        return;
+      }
+
+      const tbody = document.querySelector('#messages-table tbody');
+      tbody.innerHTML = '';
+
+      messages.forEach(msg => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${msg.name || 'Anonymous'}</td>
+          <td>${msg.email || 'No email'}</td>
+          <td>${msg.message}</td>
+          <td>${new Date(msg.created_at).toLocaleString()}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    loadMessages();
+  </script>
+
+</body>
+</html>

@@ -98,7 +98,7 @@
   </nav>
 
   <main>
-    <form action="https://formspree.io/f/mwvoybrg" method="POST">
+    <form action="https://formspree.io/f/mwvoybrg" method="POST" id="contact-form">
       <input type="text" name="name" placeholder="Your Name" required>
       <input type="email" name="email" placeholder="Your Email" required>
       <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
@@ -132,10 +132,11 @@
       btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
     });
 
-    // Contact Form Submission (saves to Supabase + sends email via Formspree)
+    // Contact Form Submission (saves to Supabase + Formspree email)
     const form = document.getElementById('contact-form');
     form.addEventListener('submit', async (e) => {
-      e.preventDefault(); // Prevent default only to handle both saves
+      // Remove e.preventDefault() for real Formspree send
+      // e.preventDefault();  // <-- comment out or remove this line
 
       const name = form.name.value;
       const email = form.email.value;
@@ -151,10 +152,11 @@
       } else {
         alert('Message Sent & Saved! 🚀');
         form.reset();
-        form.submit(); // Now send to Formspree for email
+        // form.submit();  // <-- uncomment if you want real Formspree redirect after save
       }
     });
   </script>
 
 </body>
-</html>
+</html> 
+
