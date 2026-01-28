@@ -98,7 +98,7 @@
   </nav>
 
   <main>
- <form action="https://formspree.io/f/mwvoybrg" method="POST">
+    <form action="https://formspree.io/f/mwvoybrg" method="POST">
       <input type="text" name="name" placeholder="Your Name" required>
       <input type="email" name="email" placeholder="Your Email" required>
       <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
@@ -110,12 +110,21 @@
     <p>© 2026 Zeki – My First Project</p>
   </footer>
 
-  <!-- Dark Mode Toggle (same as before) -->
+  <!-- Dark Mode Toggle -->
   <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
     Dark Mode
   </button>
 
+  <!-- Supabase JS library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+    // Supabase client — your keys
+    const supabase = Supabase.createClient(
+      'https://ivzgavjkczflzwjkyohi.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2emdhdmprY3pmbHp3amt5b2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDMwNDEsImV4cCI6MjA4NTE3OTA0MX0.DYAMKSP3QVDAIvrmaJwg3b9uqLQ4mm88Wvsf1wJ2isE'
+    );
+
     // Dark Mode Toggle
     const btn = document.getElementById('dark-mode-btn');
     btn.addEventListener('click', () => {
@@ -123,12 +132,27 @@
       btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
     });
 
-    // Contact Form Submission
+    // Contact Form Submission (saves to Supabase + sends email via Formspree)
     const form = document.getElementById('contact-form');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault(); // Stop real submission (for now)
-      alert('Message Sent! 🚀\n\nThanks for reaching out — I\'ll get back to you soon.');
-      form.reset(); // Clear the form
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent default only to handle both saves
+
+      const name = form.name.value;
+      const email = form.email.value;
+      const message = form.message.value;
+
+      // Save to Supabase
+      const { error } = await supabase
+        .from('messages')
+        .insert({ name, email, message });
+
+      if (error) {
+        alert('Error saving message — try again');
+      } else {
+        alert('Message Sent & Saved! 🚀');
+        form.reset();
+        form.submit(); // Now send to Formspree for email
+      }
     });
   </script>
 
