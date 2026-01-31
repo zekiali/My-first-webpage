@@ -13,6 +13,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: background-color 0.3s, color 0.3s;
     }
     header {
       background-color: #0066cc;
@@ -148,8 +149,8 @@
     Dark Mode
   </button>
 
-  <!-- Logout Button -->
-  <button onclick="supabase.auth.signOut().then(() => window.location.href = 'index.html')" style="position: fixed; top: 20px; right: 150px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Logout">
+  <!-- Logout Button (real Supabase logout) -->
+  <button id="logout-btn" style="position: fixed; top: 20px; right: 150px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Logout">
     Logout
   </button>
 
@@ -178,6 +179,13 @@
     btn.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+    });
+
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'index.html';
     });
 
     // Load Messages from Supabase
