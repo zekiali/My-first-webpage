@@ -118,7 +118,7 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="dashboard.html">Dashboard</a>
-    <a href="login.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Login</a>  <!-- ← New Login link -->
+    <a href="login.html">Login</a>
   </nav>
 
   <main>
@@ -149,8 +149,8 @@
     Dark Mode
   </button>
 
-  <!-- Logout Button (ready for Day 9 login) -->
-  <button onclick="alert('Logout feature coming in Day 9!')" style="position: fixed; top: 20px; right: 150px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Logout">
+  <!-- Logout Button (real Supabase logout) -->
+  <button onclick="supabase.auth.signOut().then(() => window.location.href = 'index.html')" style="position: fixed; top: 20px; right: 150px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Logout">
     Logout
   </button>
 
@@ -163,6 +163,16 @@
       'https://ivzgavjkczflzwjkyohi.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2emdhdmprY3pmbHp3amt5b2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDMwNDEsImV4cCI6MjA4NTE3OTA0MX0.DYAMKSP3QVDAIvrmaJwg3b9uqLQ4mm88Wvsf1wJ2isE'
     );
+
+    // Check if logged in — redirect to login if not
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = 'login.html';
+      }
+    }
+
+    checkAuth();
 
     // Dark Mode Toggle
     const btn = document.getElementById('dark-mode-btn');
