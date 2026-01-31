@@ -149,7 +149,7 @@
     Dark Mode
   </button>
 
-  <!-- Logout Button (real Supabase logout) -->
+  <!-- Real Logout Button -->
   <button id="logout-btn" style="position: fixed; top: 20px; right: 150px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Logout">
     Logout
   </button>
@@ -181,7 +181,7 @@
       btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
     });
 
-    // Logout
+    // Real Logout
     const logoutBtn = document.getElementById('logout-btn');
     logoutBtn.addEventListener('click', async () => {
       await supabase.auth.signOut();
