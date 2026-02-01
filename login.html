@@ -53,6 +53,13 @@
     button:hover {
       background: #0052a3;
     }
+    .google-btn {
+      background: #4285F4 !important;
+      margin-top: 20px;
+    }
+    .google-btn:hover {
+      background: #3367D6 !important;
+    }
     .error {
       color: red;
       margin-top: 10px;
@@ -73,6 +80,15 @@
     .toggle-link:hover {
       text-decoration: underline;
     }
+    .back-link {
+      margin-top: 20px;
+      display: block;
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
     .dark-mode {
       background-color: #121212;
       color: #e0e0e0;
@@ -84,7 +100,7 @@
     .dark-mode h1 {
       color: #5a9eff;
     }
-    .dark-mode .toggle-link {
+    .dark-mode .toggle-link, .dark-mode .back-link {
       color: #5a9eff;
     }
   </style>
@@ -110,7 +126,9 @@
     <p class="error" id="signup-error-msg"></p>
     <p class="success" id="signup-success-msg" style="display: none;">Sign Up successful! Check your email for verification.</p>
 
-    <p><a href="index.html" class="toggle-link">← Back to Home</a></p>
+    <button class="google-btn" onclick="googleLogin()">Login with Google</button> <!-- ← Added Google button here -->
+
+    <p><a href="index.html" class="back-link">← Back to Home</a></p>
   </main>
 
   <!-- Dark Mode Toggle -->
@@ -185,6 +203,19 @@
         signupForm.reset();
       }
     });
+
+    // Google Login (added)
+    async function googleLogin() {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard.html'  // Redirect to dashboard after Google login
+        }
+      });
+      if (error) {
+        loginErrorMsg.textContent = error.message;  // Use login error msg for Google errors
+      }
+    }
   </script>
 
 </body>
