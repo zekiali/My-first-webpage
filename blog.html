@@ -172,7 +172,7 @@
 
       const { error } = await supabase
         .from('posts')
-        .insert({ user_id: session.user.id, message });
+        .insert({ user_id: session.user.id, message, email: session.user.email });
 
       if (error) {
         alert('Error posting: ' + error.message);
@@ -202,6 +202,7 @@
         const div = document.createElement('div');
         div.classList.add('post');
         div.innerHTML = `
+          <p class="author">${post.email || 'Anonymous'}</p>
           <p>${post.message}</p>
           <p class="timestamp">${new Date(post.created_at).toLocaleString()}</p>
         `;
