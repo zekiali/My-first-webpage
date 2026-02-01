@@ -123,42 +123,58 @@
 
   <main>
     <h2>Received Messages</h2>
-    <table id="messages-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Message</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Messages loaded here by JS -->
-      </tbody>
-    </table>
+    <div class="messages-container">
+      <table id="messages-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Messages loaded here by JS -->
+        </tbody>
+      </table>
+      <div style="text-align:center; margin-top: 20px;">
+        <button onclick="loadMessages()" style="padding: 10px 20px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+          Refresh Messages
+        </button>
+      </div>
+    </div>
     <p id="no-messages" class="no-messages">No messages yet — submit one on the Contact page!</p>
     <p id="error-message" class="error" style="display: none;"></p>
+      .messages-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
   </main>
 
   <footer>
     <p>© 2026 Zeki – My First Project</p>
   </footer>
 
+
+  <!-- Real Logout Button -->
+  <button id="logout-btn" style="position: fixed; top: 20px; right: 170px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right:10px;" aria-label="Logout">
+    Logout
+  </button>
+
+  <!-- Refresh Button -->
+  <button id="refresh-btn" style="position: fixed; top: 20px; right: 100px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right:10px;" aria-label="Refresh messages">
+    Refresh <span id="refresh-spinner" style="display:none; margin-left:8px;">⏳</span>
+  </button>
+
   <!-- Dark Mode Toggle -->
   <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Toggle dark mode">
     Dark Mode
-  </button>
-
-  <!-- Real Logout Button -->
-  <button id="logout-btn" style="position: fixed; top: 20px; right: 150px; padding: 10px 15px; background: #cc0000; color: white; border: none; border-radius: 5px; cursor: pointer;" aria-label="Logout">
-    Logout
   </button>
 
   <!-- Supabase JS library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // Supabase client — your keys
     const supabase = Supabase.createClient(
       'https://ivzgavjkczflzwjkyohi.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2emdhdmprY3pmbHp3amt5b2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDMwNDEsImV4cCI6MjA4NTE3OTA0MX0.DYAMKSP3QVDAIvrmaJwg3b9uqLQ4mm88Wvsf1wJ2isE'
@@ -207,7 +223,7 @@
         return;
       }
 
-      if (messages.length === 0) {
+      if (!messages || messages.length === 0) {
         noMessages.style.display = 'block';
         tbody.innerHTML = '';
         errorMessage.style.display = 'none';
@@ -229,7 +245,28 @@
       }
     }
 
+
+    // Refresh Button logic with loading spinner
+    const refreshBtn = document.getElementById('refresh-btn');
+    const refreshSpinner = document.getElementById('refresh-spinner');
+    refreshBtn.addEventListener('click', async () => {
+      refreshSpinner.style.display = 'inline';
+      refreshBtn.disabled = true;
+      await loadMessages();
+      refreshSpinner.style.display = 'none';
+      refreshBtn.disabled = false;
+    });
+
+    // Initial load
     loadMessages();
+
+    // Realtime Subscription (new messages appear instantly)
+    supabase.channel('messages-channel')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
+        loadMessages(); // Reload table on new insert
+      })
+      .subscribe();
+
   </script>
 
 </body>
