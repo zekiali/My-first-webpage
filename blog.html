@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog - Zeki</title>
   <style>
+    /* ===== BASE STYLES ===== */
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f4f8;
@@ -15,35 +16,47 @@
       flex-direction: column;
       transition: background-color 0.3s, color 0.3s;
     }
+
+    /* ===== HEADER & NAVIGATION ===== */
     header {
       background-color: #0066cc;
       color: white;
       padding: 20px;
       text-align: center;
     }
+
     nav {
       background-color: #0052a3;
       padding: 10px;
       text-align: center;
     }
+
     nav a {
       color: white;
       margin: 0 20px;
       text-decoration: none;
       font-weight: bold;
     }
+
     nav a:hover {
       text-decoration: underline;
     }
+
+    /* ===== MAIN CONTENT ===== */
     main {
       flex: 1;
       padding: 40px 20px;
       max-width: 800px;
       margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
     }
+
+    /* ===== FORM STYLES ===== */
     form {
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
+
     textarea {
       width: 100%;
       padding: 12px;
@@ -51,9 +64,11 @@
       border-radius: 5px;
       font-size: 1em;
       box-sizing: border-box;
+      resize: vertical;
     }
+
     button {
-      padding: 12px;
+      padding: 12px 20px;
       background: #0066cc;
       color: white;
       border: none;
@@ -61,10 +76,14 @@
       cursor: pointer;
       font-weight: bold;
       margin-top: 10px;
+      transition: background 0.2s;
     }
+
     button:hover {
       background: #0052a3;
     }
+
+    /* ===== POST STYLES ===== */
     .post {
       background: white;
       padding: 20px;
@@ -72,19 +91,115 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
-    .post p {
-      margin: 0;
-    }
+
     .post .author {
       font-weight: bold;
       color: #0066cc;
-      margin-bottom: 10px;
+      margin: 0 0 10px 0;
     }
+
+    .post .message {
+      margin: 0 0 10px 0;
+      line-height: 1.5;
+    }
+
     .post .timestamp {
       color: #666;
       font-size: 0.9em;
-      margin-top: 10px;
+      margin: 0 0 15px 0;
     }
+
+    /* ===== LIKE & COMMENT SECTION ===== */
+    .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    .like-btn {
+      padding: 8px 16px;
+      font-size: 0.9em;
+      margin-top: 0;
+    }
+
+    .like-count {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    /* ===== COMMENT FORM ===== */
+    .comment-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .comment-form input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.9em;
+    }
+
+    .comment-form button {
+      padding: 10px 15px;
+      margin-top: 0;
+      font-size: 0.9em;
+    }
+
+    /* ===== COMMENTS LIST ===== */
+    .comments-section {
+      background: #f9f9f9;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .comments-section h4 {
+      margin: 0 0 10px 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .comment {
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 8px;
+      border-left: 3px solid #0066cc;
+    }
+
+    .comment:last-child {
+      margin-bottom: 0;
+    }
+
+    .comment .comment-author {
+      font-weight: bold;
+      color: #0066cc;
+      font-size: 0.85em;
+    }
+
+    .comment .comment-text {
+      margin: 5px 0 0 0;
+      font-size: 0.9em;
+    }
+
+    .comment .comment-time {
+      color: #999;
+      font-size: 0.75em;
+      margin-top: 5px;
+    }
+
+    .no-comments {
+      color: #999;
+      font-size: 0.85em;
+      font-style: italic;
+    }
+
+    /* ===== FOOTER ===== */
     footer {
       background-color: #0066cc;
       color: white;
@@ -92,28 +207,72 @@
       padding: 20px;
       margin-top: auto;
     }
+
+    /* ===== DARK MODE ===== */
     .dark-mode {
       background-color: #121212;
       color: #e0e0e0;
     }
-    .dark-mode header, .dark-mode nav, .dark-mode footer {
+
+    .dark-mode header,
+    .dark-mode nav,
+    .dark-mode footer {
       background-color: #1e1e1e;
     }
-    .dark-mode main .post {
+
+    .dark-mode .post {
       background: #1e1e1e;
       box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
-    .dark-mode .post .author {
+
+    .dark-mode .post .author,
+    .dark-mode .comment .comment-author {
       color: #5a9eff;
+    }
+
+    .dark-mode .post-actions {
+      border-top-color: #333;
+    }
+
+    .dark-mode .comments-section {
+      background: #2a2a2a;
+    }
+
+    .dark-mode .comment {
+      background: #333;
+      border-left-color: #5a9eff;
+    }
+
+    .dark-mode textarea,
+    .dark-mode .comment-form input {
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+
+    /* ===== LOADING STATE ===== */
+    .loading {
+      text-align: center;
+      color: #666;
+      padding: 20px;
+    }
+
+    .empty-feed {
+      text-align: center;
+      color: #999;
+      padding: 40px;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
 
+  <!-- ===== HEADER ===== -->
   <header>
     <h1>Blog Feed</h1>
   </header>
 
+  <!-- ===== NAVIGATION ===== -->
   <nav>
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
@@ -123,41 +282,54 @@
     <a href="blog.html">Blog</a>
   </nav>
 
+  <!-- ===== MAIN CONTENT ===== -->
   <main>
     <h2>Post a Message</h2>
     <form id="post-form">
-      <textarea id="post-message" rows="4" placeholder="Your Message" required></textarea>
+      <textarea id="post-message" rows="4" placeholder="What's on your mind?" required></textarea>
       <button type="submit">Post</button>
     </form>
+
     <h2>Feed</h2>
-    <div id="debug-messages" style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 10px; display: none; font-size: 0.9em;"></div>
-    <div id="feed"></div>
+    <div id="feed">
+      <p class="loading">Loading posts...</p>
+    </div>
   </main>
 
+  <!-- ===== FOOTER ===== -->
   <footer>
     <p>© 2026 Zeki – My First Project</p>
   </footer>
 
-  <!-- Dark Mode Toggle -->
-  <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+  <!-- ===== DARK MODE TOGGLE ===== -->
+  <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; margin-top: 0;">
     Dark Mode
   </button>
 
+  <!-- ===== SCRIPTS ===== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // ===== SUPABASE INITIALIZATION =====
     const supabase = Supabase.createClient(
       'https://ivzgavjkczflzwjkyohi.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2emdhdmprY3pmbHp3amt5b2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDMwNDEsImV4cCI6MjA4NTE3OTA0MX0.DYAMKSP3QVDAIvrmaJwg3b9uqLQ4mm88Wvsf1wJ2isE'
     );
 
-    // Dark Mode Toggle
-    const btn = document.getElementById('dark-mode-btn');
-    btn.addEventListener('click', () => {
+    // ===== DARK MODE TOGGLE =====
+    const darkModeBtn = document.getElementById('dark-mode-btn');
+    darkModeBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
-      btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+      darkModeBtn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     });
 
-    // Post Form Submission
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      darkModeBtn.textContent = 'Light Mode';
+    }
+
+    // ===== POST FORM SUBMISSION =====
     const postForm = document.getElementById('post-form');
     postForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -169,94 +341,188 @@
         return;
       }
 
-      const message = document.getElementById('post-message').value;
+      const message = document.getElementById('post-message').value.trim();
+      if (!message) return;
 
-      console.log('Posting with user:', session.user.email, 'Message:', message);
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('posts')
-        .insert({ user_id: session.user.id, message, email: session.user.email });
+        .insert({
+          user_id: session.user.id,
+          message: message,
+          email: session.user.email
+        });
 
       if (error) {
-        console.error('Insert error:', error);
+        console.error('Post error:', error);
         alert('Error posting: ' + error.message);
       } else {
-        console.log('Post inserted successfully:', data);
-        alert('Posted!');
         postForm.reset();
-        await loadPosts();
+        loadPosts();
       }
     });
 
-    // Debug helper
-    function addDebugMessage(msg) {
-      const debugDiv = document.getElementById('debug-messages');
-      debugDiv.style.display = 'block';
-      debugDiv.innerHTML += `<p>${msg}</p>`;
-    }
-
-    // Load Posts from Supabase
+    // ===== LOAD ALL POSTS WITH LIKES & COMMENTS =====
     async function loadPosts() {
-      console.log('Loading posts...');
-      addDebugMessage('🔄 Loading posts...');
+      const feed = document.getElementById('feed');
+
+      // Fetch posts
       const { data: posts, error } = await supabase
         .from('posts')
         .select('*')
         .order('created_at', { ascending: false });
 
-      const feed = document.getElementById('feed');
-
       if (error) {
         console.error('Error loading posts:', error);
-        addDebugMessage(`❌ <strong>ERROR: ${error.code}</strong> - ${error.message}`);
-        feed.innerHTML = `<p style="color: red; font-weight: bold;">Error: ${error.message}</p>`;
+        feed.innerHTML = `<p style="color: red;">Error loading posts: ${error.message}</p>`;
         return;
       }
 
-      console.log('Loaded posts:', posts);
-      addDebugMessage(`✅ Loaded ${posts ? posts.length : 0} posts`);
-
-      feed.innerHTML = '';
       if (!posts || posts.length === 0) {
-        feed.innerHTML = '<p style="color: #999;">No posts yet. Be the first!</p>';
+        feed.innerHTML = '<p class="empty-feed">No posts yet. Be the first to post!</p>';
         return;
       }
 
-      posts.forEach(post => {
+      // Fetch all likes and comments
+      const postIds = posts.map(p => p.id);
+      
+      const [likesResult, commentsResult] = await Promise.all([
+        supabase.from('likes').select('*').in('post_id', postIds),
+        supabase.from('comments').select('*').in('post_id', postIds).order('created_at', { ascending: true })
+      ]);
+
+      const likes = likesResult.data || [];
+      const comments = commentsResult.data || [];
+
+      // Build the feed HTML
+      feed.innerHTML = '';
+      
+      for (const post of posts) {
+        const postLikes = likes.filter(l => l.post_id === post.id);
+        const postComments = comments.filter(c => c.post_id === post.id);
+        
         const div = document.createElement('div');
         div.classList.add('post');
         div.innerHTML = `
           <p class="author">${post.email || 'Anonymous'}</p>
-          <p>${post.message}</p>
+          <p class="message">${escapeHtml(post.message)}</p>
           <p class="timestamp">${new Date(post.created_at).toLocaleString()}</p>
+          
+          <div class="post-actions">
+            <button class="like-btn" onclick="likePost(${post.id})">❤️ Like</button>
+            <span class="like-count">${postLikes.length} ${postLikes.length === 1 ? 'like' : 'likes'}</span>
+          </div>
+          
+          <form class="comment-form" onsubmit="addComment(${post.id}, event)">
+            <input type="text" placeholder="Write a comment..." required>
+            <button type="submit">Send</button>
+          </form>
+          
+          <div class="comments-section">
+            <h4>Comments (${postComments.length})</h4>
+            ${postComments.length === 0 
+              ? '<p class="no-comments">No comments yet</p>' 
+              : postComments.map(c => `
+                  <div class="comment">
+                    <span class="comment-author">${c.email || 'Anonymous'}</span>
+                    <p class="comment-text">${escapeHtml(c.comment)}</p>
+                    <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
+                  </div>
+                `).join('')
+            }
+          </div>
         `;
         feed.appendChild(div);
-      });
+      }
     }
 
-    // Check auth
-    (async () => {
+    // ===== LIKE A POST =====
+    async function likePost(postId) {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        addDebugMessage(`✅ Logged in as: ${session.user.email}`);
+      if (!session) {
+        alert('Please login to like posts');
+        window.location.href = 'login.html';
+        return;
       }
-    })();
 
+      const { error } = await supabase
+        .from('likes')
+        .insert({
+          user_id: session.user.id,
+          post_id: postId,
+          email: session.user.email
+        });
+
+      if (error) {
+        if (error.code === '23505') {
+          alert('You already liked this post!');
+        } else {
+          console.error('Like error:', error);
+        }
+      }
+      // Realtime will trigger reload
+    }
+
+    // ===== ADD A COMMENT =====
+    async function addComment(postId, event) {
+      event.preventDefault();
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert('Please login to comment');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const input = event.target.querySelector('input');
+      const comment = input.value.trim();
+      if (!comment) return;
+
+      const { error } = await supabase
+        .from('comments')
+        .insert({
+          user_id: session.user.id,
+          post_id: postId,
+          comment: comment,
+          email: session.user.email
+        });
+
+      if (error) {
+        console.error('Comment error:', error);
+        alert('Error posting comment: ' + error.message);
+      } else {
+        input.value = '';
+      }
+      // Realtime will trigger reload
+    }
+
+    // ===== HELPER: ESCAPE HTML =====
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ===== INITIAL LOAD =====
     loadPosts();
 
-    // Realtime Subscription
-    console.log('Setting up realtime subscription...');
-    addDebugMessage('Setting up realtime subscription...');
-    supabase.channel('posts-channel')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, (payload) => {
-        console.log('Realtime insert detected:', payload);
-        addDebugMessage('🔄 New post via realtime!');
+    // ===== REALTIME SUBSCRIPTIONS =====
+    supabase.channel('blog-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
+        console.log('Posts changed - reloading...');
+        loadPosts();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'likes' }, () => {
+        console.log('Likes changed - reloading...');
+        loadPosts();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, () => {
+        console.log('Comments changed - reloading...');
         loadPosts();
       })
       .subscribe((status) => {
-        addDebugMessage(`📡 Realtime: ${status}`);
+        console.log('Realtime status:', status);
       });
   </script>
 
 </body>
-</html>
+</html> 
