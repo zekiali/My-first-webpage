@@ -170,21 +170,26 @@
 
       const message = document.getElementById('post-message').value;
 
-      const { error } = await supabase
+      console.log('Posting with user:', session.user.email, 'Message:', message);
+
+      const { data, error } = await supabase
         .from('posts')
         .insert({ user_id: session.user.id, message, email: session.user.email });
 
       if (error) {
+        console.error('Insert error:', error);
         alert('Error posting: ' + error.message);
       } else {
+        console.log('Post inserted successfully:', data);
         alert('Posted!');
         postForm.reset();
-        loadPosts();
+        await loadPosts();
       }
     });
 
     // Load Posts from Supabase
     async function loadPosts() {
+      console.log('Loading posts...');
       const { data: posts, error } = await supabase
         .from('posts')
         .select('*')
@@ -195,6 +200,14 @@
 
       if (error) {
         console.error('Error loading posts:', error);
+        feed.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        return;
+      }
+
+      console.log('Loaded posts:', posts);
+
+      if (!posts || posts.length === 0) {
+        feed.innerHTML = '<p style="color: #999;">No posts yet. Be the first!</p>';
         return;
       }
 
@@ -213,11 +226,15 @@
     loadPosts();
 
     // Realtime Subscription (new posts appear instantly)
+    console.log('Setting up realtime subscription...');
     supabase.channel('posts-channel')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, () => {
-        loadPosts(); // Reload feed on new post
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, (payload) => {
+        console.log('Realtime insert detected:', payload);
+        loadPosts();
       })
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Subscription status:', status);
+      });
   </script>
 
 </body>
