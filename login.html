@@ -15,15 +15,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      transition: background-color 0.3s, color 0.3s;
     }
     main {
       max-width: 400px;
       width: 100%;
-      padding: 30px;
+      padding: 40px;
       background: white;
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
+    }
+    h1 {
+      color: #0066cc;
+      margin-bottom: 30px;
     }
     input {
       width: 100%;
@@ -32,6 +37,7 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       box-sizing: border-box;
+      font-size: 1em;
     }
     button {
       width: 100%;
@@ -42,6 +48,7 @@
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
+      margin-top: 10px;
     }
     button:hover {
       background: #0052a3;
@@ -49,6 +56,36 @@
     .error {
       color: red;
       margin-top: 10px;
+      font-weight: bold;
+    }
+    .success {
+      color: green;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .toggle-link {
+      margin-top: 15px;
+      display: block;
+      color: #0066cc;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+    .dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    .dark-mode main {
+      background: #1e1e1e;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .dark-mode h1 {
+      color: #5a9eff;
+    }
+    .dark-mode .toggle-link {
+      color: #5a9eff;
     }
   </style>
 </head>
@@ -57,13 +94,29 @@
   <main>
     <h1>Login</h1>
     <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="email" id="login-email" placeholder="Email" required>
+      <input type="password" id="login-password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
-    <p class="error" id="error-msg"></p>
-    <p><a href="index.html">Back to Home</a></p>
+    <p class="error" id="login-error-msg"></p>
+
+    <p class="toggle-link" onclick="toggleSignUp()">Don't have an account? Sign Up</p>
+
+    <form id="signup-form" style="display: none;">
+      <input type="email" id="signup-email" placeholder="Email" required>
+      <input type="password" id="signup-password" placeholder="Password" required>
+      <button type="submit">Sign Up</button>
+    </form>
+    <p class="error" id="signup-error-msg"></p>
+    <p class="success" id="signup-success-msg" style="display: none;">Sign Up successful! Check your email for verification.</p>
+
+    <p><a href="index.html" class="toggle-link">← Back to Home</a></p>
   </main>
+
+  <!-- Dark Mode Toggle -->
+  <button id="dark-mode-btn" style="position: fixed; top: 20px; right: 20px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Dark Mode
+  </button>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -72,15 +125,28 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2emdhdmprY3pmbHp3amt5b2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MDMwNDEsImV4cCI6MjA4NTE3OTA0MX0.DYAMKSP3QVDAIvrmaJwg3b9uqLQ4mm88Wvsf1wJ2isE'
     );
 
-    const form = document.getElementById('login-form');
-    const errorMsg = document.getElementById('error-msg');
+    // Dark Mode Toggle
+    const btn = document.getElementById('dark-mode-btn');
+    btn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+    });
 
-    form.addEventListener('submit', async (e) => {
+    // Toggle Signup Form
+    function toggleSignUp() {
+      document.getElementById('signup-form').style.display = 'block';
+    }
+
+    // Login Form Submission
+    const loginForm = document.getElementById('login-form');
+    const loginErrorMsg = document.getElementById('login-error-msg');
+
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      errorMsg.textContent = '';
+      loginErrorMsg.textContent = '';
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -88,9 +154,35 @@
       });
 
       if (error) {
-        errorMsg.textContent = error.message;
+        loginErrorMsg.textContent = error.message;
       } else {
         window.location.href = 'dashboard.html'; // Redirect to dashboard on success
+      }
+    });
+
+    // Signup Form Submission (Supabase email verification)
+    const signupForm = document.getElementById('signup-form');
+    const signupErrorMsg = document.getElementById('signup-error-msg');
+    const signupSuccessMsg = document.getElementById('signup-success-msg');
+
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      signupErrorMsg.textContent = '';
+      signupSuccessMsg.style.display = 'none';
+
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+      });
+
+      if (error) {
+        signupErrorMsg.textContent = error.message;
+      } else {
+        signupSuccessMsg.style.display = 'block';
+        signupForm.reset();
       }
     });
   </script>
