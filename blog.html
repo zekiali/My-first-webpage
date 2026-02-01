@@ -130,6 +130,7 @@
       <button type="submit">Post</button>
     </form>
     <h2>Feed</h2>
+    <div id="debug-messages" style="background: #fff3cd; padding: 10px; border-radius: 5px; margin-bottom: 10px; display: none; font-size: 0.9em;"></div>
     <div id="feed"></div>
   </main>
 
@@ -187,25 +188,35 @@
       }
     });
 
+    // Debug helper
+    function addDebugMessage(msg) {
+      const debugDiv = document.getElementById('debug-messages');
+      debugDiv.style.display = 'block';
+      debugDiv.innerHTML += `<p>${msg}</p>`;
+    }
+
     // Load Posts from Supabase
     async function loadPosts() {
       console.log('Loading posts...');
+      addDebugMessage('🔄 Loading posts...');
       const { data: posts, error } = await supabase
         .from('posts')
         .select('*')
         .order('created_at', { ascending: false });
 
       const feed = document.getElementById('feed');
-      feed.innerHTML = '';
 
       if (error) {
         console.error('Error loading posts:', error);
-        feed.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        addDebugMessage(`❌ <strong>ERROR: ${error.code}</strong> - ${error.message}`);
+        feed.innerHTML = `<p style="color: red; font-weight: bold;">Error: ${error.message}</p>`;
         return;
       }
 
       console.log('Loaded posts:', posts);
+      addDebugMessage(`✅ Loaded ${posts ? posts.length : 0} posts`);
 
+      feed.innerHTML = '';
       if (!posts || posts.length === 0) {
         feed.innerHTML = '<p style="color: #999;">No posts yet. Be the first!</p>';
         return;
@@ -223,17 +234,27 @@
       });
     }
 
+    // Check auth
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        addDebugMessage(`✅ Logged in as: ${session.user.email}`);
+      }
+    })();
+
     loadPosts();
 
-    // Realtime Subscription (new posts appear instantly)
+    // Realtime Subscription
     console.log('Setting up realtime subscription...');
+    addDebugMessage('Setting up realtime subscription...');
     supabase.channel('posts-channel')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, (payload) => {
         console.log('Realtime insert detected:', payload);
+        addDebugMessage('🔄 New post via realtime!');
         loadPosts();
       })
       .subscribe((status) => {
-        console.log('Subscription status:', status);
+        addDebugMessage(`📡 Realtime: ${status}`);
       });
   </script>
 
