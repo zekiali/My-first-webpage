@@ -97,7 +97,7 @@
     <a href="contact.html">Contact</a>
     <a href="dashboard.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Dashboard</a>  <!-- ← New Dashboard link -->
     <a href="login.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Login</a>  <!-- ← New Login link -->
-    <a href="blog.html">Blog</a>
+    <a href="blog.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Blog</a>  <!-- ← New Blog link -->
  </nav>
 
   <main>
@@ -130,9 +130,18 @@
 
     // Dark Mode Toggle
     const btn = document.getElementById('dark-mode-btn');
+    
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      btn.textContent = 'Light Mode';
+    }
+    
     btn.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
-      btn.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+      const isDark = document.body.classList.contains('dark-mode');
+      btn.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+      localStorage.setItem('darkMode', isDark);
     });
 
     // Contact Form Submission (saves to Supabase + Formspree email)
