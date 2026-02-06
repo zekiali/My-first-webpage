@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Me - Zeki</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVYTH52T28"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QVYTH52T28');
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -82,6 +90,28 @@
     }
     .dark-mode main {
       background: #1e1e1e;
+    }
+
+    @media (max-width: 600px) {
+      nav a {
+        display: block;
+        margin: 10px 0;
+      }
+      main {
+        padding: 20px;
+      }
+      table {
+        font-size: 0.9em;
+      }
+      th, td {
+        padding: 12px;
+      }
+      form {
+        gap: 10px;
+      }
+      input, textarea {
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -170,5 +200,5 @@
   </script>
 
 </body>
-</html> 
+</html>
 

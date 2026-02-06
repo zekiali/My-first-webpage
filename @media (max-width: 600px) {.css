@@ -1,0 +1,21 @@
+@media (max-width: 600px) {
+  nav a {
+    display: block;
+    margin: 10px 0;
+  }
+  main {
+    padding: 20px;
+  }
+  table {
+    font-size: 0.9em;
+  }
+  th, td {
+    padding: 12px;
+  }
+  form {
+    gap: 10px;
+  }
+  input, textarea {
+    font-size: 1em;
+  }
+}

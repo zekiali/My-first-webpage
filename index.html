@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My First Page - Zeki</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVYTH52T28"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QVYTH52T28');
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -36,6 +44,28 @@
     .dark-mode footer {
       background-color: #1e1e1e;
     }
+
+    @media (max-width: 600px) {
+      nav a {
+        display: block;
+        margin: 10px 0;
+      }
+      main {
+        padding: 20px;
+      }
+      table {
+        font-size: 0.9em;
+      }
+      th, td {
+        padding: 12px;
+      }
+      form {
+        gap: 10px;
+      }
+      input, textarea {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -48,6 +78,7 @@
     <a href="dashboard.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Dashboard</a>
     <a href="login.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Login</a>
     <a href="blog.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Blog</a>
+    <a href="profile.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Profile</a>
   </nav>
 
   <h1>Hello, World!</h1>
