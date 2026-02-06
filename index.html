@@ -18,11 +18,25 @@
       background-color: #f0f4f8;
       color: #333;
       text-align: center;
-      padding: 50px;
+      padding: 0;
       margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+    }
+    nav {
+      background: #0052a3;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
     }
     h1 {
       color: #0066cc;
@@ -70,15 +84,14 @@
 </head>
 <body>
 
-  <!-- Full navigation bar with all links (updated in Day 9) -->
-  <nav style="background: #0052a3; padding: 10px; text-align: center;">
-    <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Home</a>
-    <a href="about.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">About</a>
-    <a href="contact.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Contact</a>
-    <a href="dashboard.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Dashboard</a>
-    <a href="login.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Login</a>
-    <a href="blog.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Blog</a>
-    <a href="profile.html" style="color: white; margin: 0 15px; text-decoration: none; font-weight: bold;">Profile</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="login.html">Login</a>
+    <a href="blog.html">Blog</a>
+    <a href="profile.html">Profile</a>
   </nav>
 
   <h1>Hello, World!</h1>
