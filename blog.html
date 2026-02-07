@@ -12,6 +12,8 @@
     gtag('js', new Date());
     gtag('config', 'G-QVYTH52T28');
   </script>
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     /* ===== BASE STYLES ===== */
     body {
@@ -458,6 +460,7 @@
           <div class="post-actions">
             <button class="like-btn" onclick="likePost(${post.id})">❤️ Like</button>
             <span class="like-count">${postLikes.length} ${postLikes.length === 1 ? 'like' : 'likes'}</span>
+            <button class="tip-btn" onclick="tipPost(${post.id})">Tip this Post</button>
           </div>
           
           <form class="comment-form" onsubmit="addComment(${post.id}, event)">
@@ -541,6 +544,29 @@
         input.value = '';
       }
       // Realtime will trigger reload
+    }
+
+    // ===== STRIPE TIP FUNCTIONALITY =====
+    const stripe = Stripe('pk_test_51SCXJSLmSvIfk150N3nmoAtNXY1rgy6j0e495M5jcr7mufASnhxzyM1hKcxAI6zc2G97ybd8fs3GQl5BJQNnDdtf00vlrSS4wo');
+
+    async function tipPost(postId) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert('Please login to tip');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [{ price: 'price_1Sy0DULmSvIfk150BpBJx2SI', quantity: 1 }],
+        mode: 'payment',
+        successUrl: window.location.origin + '/blog.html?tip=success',
+        cancelUrl: window.location.origin + '/blog.html?tip=cancel',
+      });
+
+      if (error) {
+        alert('Error starting tip: ' + error.message);
+      }
     }
 
     // ===== HELPER: ESCAPE HTML =====
