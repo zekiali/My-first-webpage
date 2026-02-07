@@ -175,11 +175,10 @@
       localStorage.setItem('darkMode', isDark);
     });
 
-    // Contact Form Submission (saves to Supabase + Formspree email)
+    // Contact Form Submission (saves to Supabase first)
     const form = document.getElementById('contact-form');
     form.addEventListener('submit', async (e) => {
-      // Remove e.preventDefault() for real Formspree send
-      // e.preventDefault();  // <-- comment out or remove this line
+      e.preventDefault(); // Prevent default form submission
 
       const name = form.name.value;
       const email = form.email.value;
@@ -195,7 +194,6 @@
       } else {
         alert('Message Sent & Saved! 🚀');
         form.reset();
-        // form.submit();  // <-- uncomment if you want real Formspree redirect after save
       }
     });
   </script>

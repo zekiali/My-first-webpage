@@ -160,7 +160,7 @@
   <main>
     <h2>Received Messages</h2>
     <div class="messages-container">
-      <table id="messages-table">
+      <table id="messages-table" style="display: none;">
         <thead>
           <tr>
             <th>Name</th>
@@ -252,6 +252,7 @@
         .select('*')
         .order('created_at', { ascending: false });
 
+      const table = document.getElementById('messages-table');
       const tbody = document.querySelector('#messages-table tbody');
       const noMessages = document.getElementById('no-messages');
       const errorMessage = document.getElementById('error-message');
@@ -261,15 +262,18 @@
         errorMessage.textContent = 'Error loading messages — please try again later.';
         errorMessage.style.display = 'block';
         noMessages.style.display = 'none';
+        table.style.display = 'none';
         return;
       }
 
       if (!messages || messages.length === 0) {
         noMessages.style.display = 'block';
+        table.style.display = 'none';
         tbody.innerHTML = '';
         errorMessage.style.display = 'none';
       } else {
         noMessages.style.display = 'none';
+        table.style.display = 'table';
         errorMessage.style.display = 'none';
         tbody.innerHTML = '';
 
