@@ -407,82 +407,92 @@
       }
     });
 
-    // ===== LOAD ALL POSTS WITH LIKES & COMMENTS (updated for Day 14 with user info from profiles) =====
+    // ===== LOAD ALL POSTS WITH LIKES & COMMENTS =====
     async function loadPosts() {
       const feed = document.getElementById('feed');
 
-      // Fetch posts with profiles
-      const { data: posts, error } = await supabase
-        .from('posts')
-        .select(`
-          *,
-          profiles ( username, avatar_url )
-        `)
-        .order('created_at', { ascending: false });
+      try {
+        // Fetch posts with profiles (left join - profiles may be null)
+        const { data: posts, error } = await supabase
+          .from('posts')
+          .select(`
+            *,
+            profiles ( username, avatar_url )
+          `)
+          .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error loading posts:', error);
-        feed.innerHTML = `<p style="color: red;">Error loading posts: ${error.message}</p>`;
-        return;
-      }
+        if (error) {
+          console.error('Error loading posts:', error);
+          feed.innerHTML = `<p style="color: red;">Error loading posts: ${error.message}</p>`;
+          return;
+        }
 
-      if (!posts || posts.length === 0) {
-        feed.innerHTML = '<p class="empty-feed">No posts yet. Be the first to post!</p>';
-        return;
-      }
+        if (!posts || posts.length === 0) {
+          feed.innerHTML = '<p class="empty-feed">No posts yet. Be the first to post!</p>';
+          return;
+        }
 
-      // Fetch all likes and comments
-      const postIds = posts.map(p => p.id);
-      
-      const [likesResult, commentsResult] = await Promise.all([
-        supabase.from('likes').select('*').in('post_id', postIds),
-        supabase.from('comments').select('*').in('post_id', postIds).order('created_at', { ascending: true })
-      ]);
-
-      const likes = likesResult.data || [];
-      const comments = commentsResult.data || [];
-
-      // Build the feed HTML
-      feed.innerHTML = '';
-      
-      for (const post of posts) {
-        const postLikes = likes.filter(l => l.post_id === post.id);
-        const postComments = comments.filter(c => c.post_id === post.id);
+        // Fetch all likes and comments
+        const postIds = posts.map(p => p.id);
         
-        const div = document.createElement('div');
-        div.classList.add('post');
-        div.innerHTML = `
-          <img src="${post.profiles.avatar_url || 'default-avatar.png'}" alt="Avatar" class="avatar">
-          <p class="author">${post.profiles.username || 'Anonymous'}</p>
-          <p class="message">${escapeHtml(post.message)}</p>
-          <p class="timestamp">${new Date(post.created_at).toLocaleString()}</p>
+        const [likesResult, commentsResult] = await Promise.all([
+          supabase.from('likes').select('*').in('post_id', postIds),
+          supabase.from('comments').select('*').in('post_id', postIds).order('created_at', { ascending: true })
+        ]);
+
+        const likes = likesResult.data || [];
+        const comments = commentsResult.data || [];
+
+        // Build the feed HTML
+        feed.innerHTML = '';
+        
+        for (const post of posts) {
+          const postLikes = likes.filter(l => l.post_id === post.id);
+          const postComments = comments.filter(c => c.post_id === post.id);
           
-          <div class="post-actions">
-            <button class="like-btn" onclick="likePost(${post.id})">❤️ Like</button>
-            <span class="like-count">${postLikes.length} ${postLikes.length === 1 ? 'like' : 'likes'}</span>
-            <button class="tip-btn" onclick="tipPost(${post.id})">Tip this Post</button>
-          </div>
+          // Handle null profiles safely
+          const username = post.profiles?.username || post.email?.split('@')[0] || 'Anonymous';
+          const avatarUrl = post.profiles?.avatar_url || 'https://via.placeholder.com/40';
           
-          <form class="comment-form" onsubmit="addComment(${post.id}, event)">
-            <input type="text" placeholder="Write a comment..." required>
-            <button type="submit">Send</button>
-          </form>
-          
-          <div class="comments-section">
-            <h4>Comments (${postComments.length})</h4>
-            ${postComments.length === 0 
-              ? '<p class="no-comments">No comments yet</p>' 
-              : postComments.map(c => `
-                  <div class="comment">
-                    <span class="comment-author">${c.email || 'Anonymous'}</span>
-                    <p class="comment-text">${escapeHtml(c.comment)}</p>
-                    <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
-                  </div>
-                `).join('')
-            }
-          </div>
-        `;
-        feed.appendChild(div);
+          const div = document.createElement('div');
+          div.classList.add('post');
+          div.innerHTML = `
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+              <img src="${avatarUrl}" alt="Avatar" class="avatar" onerror="this.src='https://via.placeholder.com/40'">
+              <p class="author" style="margin: 0;">${escapeHtml(username)}</p>
+            </div>
+            <p class="message">${escapeHtml(post.message)}</p>
+            <p class="timestamp">${new Date(post.created_at).toLocaleString()}</p>
+            
+            <div class="post-actions">
+              <button class="like-btn" onclick="likePost(${post.id})">❤️ Like</button>
+              <span class="like-count">${postLikes.length} ${postLikes.length === 1 ? 'like' : 'likes'}</span>
+            </div>
+            
+            <form class="comment-form" onsubmit="addComment(${post.id}, event)">
+              <input type="text" placeholder="Write a comment..." required>
+              <button type="submit">Send</button>
+            </form>
+            
+            <div class="comments-section">
+              <h4>Comments (${postComments.length})</h4>
+              ${postComments.length === 0 
+                ? '<p class="no-comments">No comments yet</p>' 
+                : postComments.map(c => `
+                    <div class="comment">
+                      <span class="comment-author">${escapeHtml(c.email?.split('@')[0] || 'Anonymous')}</span>
+                      <p class="comment-text">${escapeHtml(c.comment)}</p>
+                      <span class="comment-time">${new Date(c.created_at).toLocaleString()}</span>
+                    </div>
+                  `).join('')
+              }
+            </div>
+          `;
+          feed.appendChild(div);
+        }
+      } catch (err) {
+        console.error('Unexpected error loading posts:', err);
+        feed.innerHTML = `<p style="color: red;">Unexpected error: ${err.message}</p>`;
       }
     }
 
@@ -558,7 +568,7 @@
       }
 
       const { error } = await stripe.redirectToCheckout({
-        lineItems: [{ price: 'price_1Sy0DULmSvIfk150BpBJx2SI', quantity: 1 }],
+        lineItems: [{ price: 'price_1XXXXXXXXXXXXXXX', quantity: 1 }], // Create a $5 test price in Stripe dashboard
         mode: 'payment',
         successUrl: window.location.origin + '/blog.html?tip=success',
         cancelUrl: window.location.origin + '/blog.html?tip=cancel',
