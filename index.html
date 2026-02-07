@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My First Page - Zeki</title>
+  <link rel="icon" href="https://via.placeholder.com/32/0066cc/ffffff?text=Z" type="image/png">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVYTH52T28"></script>
   <script>
@@ -55,8 +56,14 @@
       background-color: #121212;
       color: #e0e0e0;
     }
+    .dark-mode nav {
+      background-color: #1e1e1e;
+    }
     .dark-mode footer {
       background-color: #1e1e1e;
+    }
+    .dark-mode h1 {
+      color: #5a9eff;
     }
 
     @media (max-width: 600px) {
@@ -97,7 +104,7 @@
   <h1>Hello, World!</h1>
   <p>This is my very first webpage. Built by Zeki in Philly on January 21, 2026.</p>
   <p>Day 2 complete 🚀</p>
-  <img src="stripe-logo.png" alt="Stripe Logo" style="max-width: 200px; border-radius: 50%; margin: 20px auto; display: block;">
+  <img src="stripe-logo.png" alt="Stripe Logo" style="max-width: 200px; border-radius: 50%; margin: 20px auto; display: block;" onerror="this.style.display='none'">
 
   <footer>
     <p>© 2026 Zeki – My First Project</p>

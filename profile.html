@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile - Zeki</title>
+  <link rel="icon" href="https://via.placeholder.com/32/0066cc/ffffff?text=Z" type="image/png">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVYTH52T28"></script>
   <script>
@@ -92,6 +93,11 @@
     }
     .dark-mode main {
       background: #1e1e1e;
+    }
+    .dark-mode input {
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border-color: #444;
     }
 
     @media (max-width: 600px) {
@@ -189,12 +195,20 @@
         .single();
 
       if (error) {
-        console.error('Error loading profile:', error);
+        // Profile might not exist yet for new users - that's okay
+        if (error.code === 'PGRST116') {
+          console.log('No profile yet - user can create one');
+          document.getElementById('username').value = session.user.email?.split('@')[0] || '';
+        } else {
+          console.error('Error loading profile:', error);
+        }
         return;
       }
 
-      document.getElementById('username').value = profile.username || '';
-      document.getElementById('avatar-url').value = profile.avatar_url || '';
+      if (profile) {
+        document.getElementById('username').value = profile.username || '';
+        document.getElementById('avatar-url').value = profile.avatar_url || '';
+      }
     }
 
     loadProfile();

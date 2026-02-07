@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog - Zeki</title>
+  <link rel="icon" href="https://via.placeholder.com/32/0066cc/ffffff?text=Z" type="image/png">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVYTH52T28"></script>
   <script>
@@ -123,16 +124,28 @@
     .post-actions {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
       margin-bottom: 15px;
       padding-top: 10px;
       border-top: 1px solid #eee;
+      flex-wrap: wrap;
     }
 
     .like-btn {
-      padding: 8px 16px;
-      font-size: 0.9em;
+      padding: 6px 12px;
+      font-size: 0.85em;
       margin-top: 0;
+    }
+
+    .tip-btn {
+      padding: 6px 12px;
+      font-size: 0.85em;
+      margin-top: 0;
+      background: #28a745;
+    }
+
+    .tip-btn:hover {
+      background: #218838;
     }
 
     .like-count {
@@ -145,6 +158,7 @@
       display: flex;
       gap: 10px;
       margin-bottom: 15px;
+      flex-direction: column;
     }
 
     .comment-form input {
@@ -159,6 +173,7 @@
       padding: 10px 15px;
       margin-top: 0;
       font-size: 0.9em;
+      width: 100%;
     }
 
     /* ===== COMMENTS LIST ===== */
@@ -294,6 +309,19 @@
       }
       main {
         padding: 20px;
+      }
+      .post-actions {
+        gap: 8px;
+      }
+      .like-btn, .tip-btn {
+        padding: 6px 12px;
+        font-size: 0.85em;
+      }
+      .comment-form {
+        flex-direction: column;
+      }
+      .comment-form button {
+        width: 100%;
       }
       table {
         font-size: 0.9em;
@@ -467,6 +495,7 @@
             <div class="post-actions">
               <button class="like-btn" onclick="likePost(${post.id})">❤️ Like</button>
               <span class="like-count">${postLikes.length} ${postLikes.length === 1 ? 'like' : 'likes'}</span>
+              <button class="tip-btn" onclick="tipPost('${post.user_id}')">💵 Tip $5</button>
             </div>
             
             <form class="comment-form" onsubmit="addComment(${post.id}, event)">
@@ -559,7 +588,7 @@
     // ===== STRIPE TIP FUNCTIONALITY =====
     const stripe = Stripe('pk_test_51SCXJSLmSvIfk150N3nmoAtNXY1rgy6j0e495M5jcr7mufASnhxzyM1hKcxAI6zc2G97ybd8fs3GQl5BJQNnDdtf00vlrSS4wo');
 
-    async function tipPost(postId) {
+    async function tipPost(authorId) {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         alert('Please login to tip');
@@ -568,7 +597,7 @@
       }
 
       const { error } = await stripe.redirectToCheckout({
-        lineItems: [{ price: 'price_1XXXXXXXXXXXXXXX', quantity: 1 }], // Create a $5 test price in Stripe dashboard
+        lineItems: [{ price: 'price_1Sy0DULmSvIfk150BpBJx2SI', quantity: 1 }],
         mode: 'payment',
         successUrl: window.location.origin + '/blog.html?tip=success',
         cancelUrl: window.location.origin + '/blog.html?tip=cancel',
